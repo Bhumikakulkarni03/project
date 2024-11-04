@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Current Patients</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/adminlte/css/adminlte.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="path/to/your/custom/script.js"></script>
+
+    <style>
+        table.dataTable tbody td {
+            word-break: break-word;
+            vertical-align: top;
+        }
+        .table.dataTable {
+            font-size: 0.9rem;
+        }
+        #newDeviceId .form-control {
+        color: black;
+    }
+    </style>
+</head>
+
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="../patients/" class="nav-link">Home</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="http://www.lifesigns.us" class="brand-link">
+            <img src="/images/logo2.png" alt="Logo" class="brand-image"> 
+            <span class="brand-text font-weight-light"></span>
+        </a>
+
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="info">
+                    <a href="#" class="d-block"></a>
+                </div>
+            </div>
+
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-header">Uroflow Data Testing</li>
+                    <li class="nav-item">
+                        <a href="../patients/" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Patients</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../logs" class="nav-link"><i class="nav-icon fas fa-file"></i><p>Logs</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../uroflow" class="nav-link"><i class="nav-icon fas fa-table"></i><p>Uroflow Meter</p></a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a href="../inflow" class="nav-link"><i class="nav-icon fas fa-table"></i><p>Inflow Meter</p></a>
+                    </li> -->
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Patient List</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="float-sm-right">
+                            <button type="button" class="btn btn-primary" onclick="$('#newPatientModal').modal('show');" id="newPatientBtn">New Patient</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <table id="patientList" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Gender/Age</th>
+                                            <th>Device Id</th>
+                                            <th>Uroflow Meter</th>
+                                            <!-- <th>Infusion Pump</th> -->
+                                            <th>Received</th>
+                                            <th>Actions</th>
+                                            <th>Waveform/Dataset</th> 
+                                            <th>Waveform/Dataset</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hourly Data Modal -->
+                <div class="modal fade" id="hourlyDataModal" tabindex="-1" aria-labelledby="hourlyDataModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="hourlyDataModalLabel">Hourly Data</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container" id="hourlyDataContainer">
+                                    <p id="loadingMessage" style="display: none;">Loading data...</p>
+                                    <table id="hourlyDataTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Hour</th>
+                                                <th>Hourly Volume</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="dailyDataModal" tabindex="-1" aria-labelledby="dailyDataModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dailyDataModalLabel">Current Data</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container" id="dailyDataContainer">
+                                    <p id="loadingMessageDaily" style="display: none;">Loading data...</p>
+                                    <table id="dailyDataTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Timestamp</th>
+                                                <th>Volume</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Chart Modal -->
+                <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="chartModalLabel">Chart</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="chartContainer">
+                                    <canvas id="plethChartCanvas" style="width: 100%; height: 400px;"></canvas>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="chartModalLabel1">Chart</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="chartContainer">
+                                    <canvas id="plethChartCanvas" style="width: 100%; height: 400px;"></canvas>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Patient Modal -->
+                <div class="modal fade" id="newPatientModal">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">New Patient</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="newPatientForm">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="f_patient_id" class="col-form-label">Patient ID:</label>
+                                        <input type="text" class="form-control" id="f_patient_id" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="f_name" class="col-form-label">Name:</label>
+                                        <input type="text" class="form-control" id="f_name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="f_account_id" class="col-form-label">Account ID:</label>
+                                        <input type="text" class="form-control" id="f_account_id" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="f_age" class="col-form-label">Age:</label>
+                                        <input type="number" class="form-control" id="f_age" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="f_gender" class="col-form-label">Gender:</label>
+                                        <select class="form-control" id="f_gender" required>
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="f_device_id" class="col-form-label">Device ID:</label>
+                                        <input type="text" class="form-control" id="f_device_id" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="addPatient()">Add Patient</button>
+                                </div>
+                            </form>                                                       
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Device Modal -->
+                <div class="modal fade" id="updateDeviceModal">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Update Device ID</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="updateDeviceForm" onsubmit="updateDeviceId();return false;">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="newDeviceId" class="col-form-label">New Device ID:</label>
+                                        <input type="text" class="form-control" id="newDeviceId" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Update Device ID</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline">
+        </div>
+        <strong>Copyright &copy; 2024 <a href="http://www.lifesigns.us">LifeSigns</a>.</strong> All rights reserved.
+    </footer>
+</div>
+
+<!-- jQuery -->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables & Plugins -->
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/plugins/jszip/jszip.min.js"></script>
+<script src="/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/dist/adminlte/js/adminlte.min.js"></script>
+
+<script>
+    function formatTimestamp(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function showHourlyChart(patientId) {
+            $('#chartModal').modal('show');
+
+            $('#chartModal').on('shown.bs.modal', function () {
+                renderChart(patientId);
+            });
+        }
+
+        function renderChart(patientId) {
+    const canvas = document.getElementById('plethChartCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set the canvas background color
+    canvas.style.backgroundColor = '#1c1c1c'; 
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/hourly-data/${patientId}`,
+        success: function (response) {
+            const labels = [];
+            const hourlyDeltas = {}; 
+            response.forEach(hourData => {
+                const hourDate = new Date(hourData.hour);
+                
+                const formattedDate = `${String(hourDate.getFullYear()).slice(-2)}-${String(hourDate.getMonth() + 1).padStart(2, '0')}-${String(hourDate.getDate()).padStart(2, '0')} ${String(hourDate.getHours()).padStart(2, '0')}`;
+
+
+                if (!hourlyDeltas[formattedDate]) {
+                    hourlyDeltas[formattedDate] = 0; 
+                }
+                hourlyDeltas[formattedDate] += hourData.hourlyDeltaSum; 
+            });
+
+
+            for (const hour in hourlyDeltas) {
+                labels.push(hour); 
+            }
+
+            const dataValues = Object.values(hourlyDeltas);
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Patient ' + patientId + ' Hourly Delta Sum',
+                    data: dataValues, 
+                    backgroundColor: 'rgba(128, 128, 128, 0.5)',
+                    borderColor: 'rgba(105, 105, 105, 1)', 
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hourly Delta Sum (ml)',
+                                color: '#ffffff'
+                            },
+                            ticks: {
+                                color: '#ffffff' 
+                            },
+                            grid: {
+                                display: false 
+                            },
+                            border: {
+                                color: 'lightgrey' 
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Hour',
+                                color: '#ffffff' 
+                            },
+                            ticks: {
+                                color: '#ffffff' 
+                            },
+                            grid: {
+                                display: false 
+                            },
+                            border: {
+                                color: 'lightgrey' 
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff' 
+                            }
+                        }
+                    }
+                }
+            });
+
+            $('#chartModal').modal('show');
+            document.addEventListener('click', reloadPage);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving chart data:', error);
+        }
+    });
+}
+function reloadPage() {
+    document.removeEventListener('click', reloadPage);
+    location.reload();
+}
+
+
+function showHourlyData(patientId) {
+    $('#hourlyDataModal').modal('show');
+
+    // Initialize DataTable
+    const hourlyDataTable = $('#hourlyDataTable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        pageLength: 10,
+        destroy: true
+    });
+
+    $('#loadingMessage').show();
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/hourly-data/${patientId}`,
+        success: function (data) {
+            console.log('Fetched hourly data:', data);
+            hourlyDataTable.clear();
+
+            if (Array.isArray(data) && data.length > 0) {
+
+                data.forEach(hourData => {
+                    
+                    const formattedHour = hourData.hour; 
+
+                    hourlyDataTable.row.add([
+                        formattedHour, 
+                        hourData.hourlyDeltaSum !== 0 ? hourData.hourlyDeltaSum : 0, 
+                        hourData.cumulativeVolume || 0 
+                    ]).draw();
+                });
+            } else {
+                // No data available
+                hourlyDataTable.row.add(["No data available", "", ""]).draw();
+            }
+
+            $('#loadingMessage').hide();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving data:', error);
+            hourlyDataTable.row.add(["Error retrieving data", "", ""]).draw();
+            $('#loadingMessage').hide();
+        }
+    });
+}
+
+
+function showcumulativedata(patientId) { 
+    $('#dailyDataModal').modal('show');
+
+    let dailyDataTable;
+    if ($.fn.DataTable.isDataTable('#dailyDataTable')) {
+        dailyDataTable = $('#dailyDataTable').DataTable();
+        dailyDataTable.clear();
+    } else {
+        dailyDataTable = $('#dailyDataTable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            pageLength: 10,
+            destroy: true
+        });
+    }
+
+    $('#loadingMessageDaily').show();
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/uroflow/${patientId}`, 
+        success: function (response) {
+            const data = response.results || []; 
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(entry => {
+                    
+                    const timestamp = entry.formatted_timestamp || '-'; 
+
+                    dailyDataTable.row.add([
+                        timestamp, 
+                        entry.f_volume !== undefined ? entry.f_volume : '-'
+                    ]);
+                });
+
+                dailyDataTable.draw();
+            } else {
+                dailyDataTable.row.add(["No data available", ""]).draw();
+            }
+
+            $('#loadingMessageDaily').hide();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving data:', error);
+            dailyDataTable.row.add(["Error retrieving data", ""]).draw();
+            $('#loadingMessageDaily').hide();
+        }
+    });
+}
+
+
+
+
+
+
+function showcumulativechart(patientId) { 
+
+$('#chartModal').modal('show');
+
+$('#chartModal').on('shown.bs.modal', function () {
+    renderDeviceDataChart(patientId); 
+});
+
+$('#chartModal').on('hidden.bs.modal', reloadPage);
+}
+
+function renderDeviceDataChart(patientId) { 
+const canvas = document.getElementById('plethChartCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.style.backgroundColor = '#1c1c1c';
+
+ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+if (!patientId) {
+    console.error('Patient ID is required to fetch data.');
+    return;
+}
+
+$.ajax({
+    type: 'GET',
+    url: '/api/uroflow/' + patientId, 
+    success: function (response) {
+        console.log('Fetched device data for patient ID:', patientId, response);
+
+        const data = response.results || []; 
+
+        if (Array.isArray(data) && data.length > 0) {
+            const labels = [];
+            const volumes = [];
+
+            data.forEach(entry => {
+                labels.push(entry.formatted_timestamp || '-'); 
+                volumes.push(entry.f_volume || 0); 
+            });
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Device Volume Over Time',
+                    data: volumes,
+                    backgroundColor: 'rgba(128, 128, 128, 0.5)', 
+                    borderColor: 'rgba(105, 105, 105, 1)', 
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (ml)',
+                                color: '#ffffff' 
+                            },
+                            ticks: {
+                                color: '#ffffff' 
+                            },
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                color: 'lightgrey' 
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time',
+                                color: '#ffffff' 
+                            },
+                            ticks: {
+                                color: '#ffffff' 
+                            },
+                            grid: {
+                                display: false 
+                            },
+                            border: {
+                                color: 'lightgrey' 
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff' 
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            console.warn("No data available for chart.");
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '16px Arial'; 
+            ctx.fillText("No data available", canvas.width / 2, canvas.height / 2);
+        }
+    },
+    error: function (xhr, status, error) {
+        console.error('Error retrieving chart data:', error);
+    }
+});
+}
+function reloadPage() {
+    $('#chartModal').off('hidden.bs.modal', reloadPage);
+    location.reload();
+}
+
+
+
+function addPatient() {
+    // Collect form data
+    const patientData = {
+        f_patient_id: $('#f_patient_id').val(),
+        f_name: $('#f_name').val(),
+        f_account_id: $('#f_account_id').val(),
+        f_age: $('#f_age').val(),
+        f_gender: $('#f_gender').val(),
+        f_device_id: $('#f_device_id').val(),
+        f_created: formatTimestamp(new Date()) 
+    };
+
+
+    console.log('Adding patient with data:', patientData); 
+
+
+    $.ajax({
+        url: '/api/patients',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(patientData),
+        success: function(response) {
+            $('#newPatientModal').modal('hide');
+            loadPatients(); 
+            alert('Patient added successfully!'); 
+            console.log('Patient added successfully:', response); 
+        },
+        error: function(error) {
+            console.error('Error adding patient:', error);
+            alert('Failed to add patient: ' + (error.responseJSON?.message || 'An error occurred'));
+            console.error('Error details:', error.responseJSON); 
+        }
+    });
+}
+
+
+function loadPatients() {
+    $.ajax({
+        url: '/api/patients',
+        method: 'GET',
+        success: function(patients) {
+            const tableBody = $('#patientList tbody');
+            tableBody.empty(); 
+
+            patients.forEach(patient => {
+
+                const formattedUroflowVolume = patient.f_uroflow_vol !== null ? patient.f_uroflow_vol : '-';
+                
+                const formattedReceivedTimestamp = patient.f_uroflow_recived 
+                    ? new Date(patient.f_uroflow_recived).toLocaleString('en-GB', {
+                        year: '2-digit',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    })
+                    : '-';
+                
+                tableBody.append(`
+                    <tr>
+                        <td>${patient.f_patient_id}</td>
+                        <td>${patient.f_name}</td>
+                        <td>${patient.f_gender}/${patient.f_age}</td>
+                        <td>${patient.f_device_id}</td>
+                        <td>${formattedUroflowVolume} ml</td> <!-- Assuming ml is the unit -->
+                        <td>${formattedReceivedTimestamp}</td>
+                        <td>
+                            <span style="cursor: pointer;" onclick="openUpdateDeviceModal('${patient.f_patient_id}');">
+                                <i class="fas fa-edit"></i>
+                            </span>
+                        </td>
+                        <td>
+                            <button onclick="showHourlyChart('${patient.f_patient_id}')" title="Show Hourly chart" style="border: none; background: none; cursor: pointer; margin-right: 8px;">
+                                <i class="fas fa-chart-line" style="color: white;"></i> 
+                            </button>
+                            <button onclick="showHourlyData('${patient.f_patient_id}')" title="Show Hourly data" style="border: none; background: none; cursor: pointer;">
+                                <i class="fas fa-table" style="color: white;"></i> 
+                            </button>
+                        </td>
+                        <td>
+                            <button onclick="showcumulativechart('${patient.f_patient_id}')" title="Show Current Chart" style="border: none; background: none; cursor: pointer; margin-right: 8px;">
+                                <i class="fas fa-chart-line" style="color: white;"></i> 
+                            </button>
+                            <button onclick="showcumulativedata('${patient.f_patient_id}')" title="Show Current Data" style="border: none; background: none; cursor: pointer;">
+                                <i class="fas fa-table" style="color: white;"></i> 
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading patients:', error);
+        }
+    });
+}
+
+
+
+
+
+    function openUpdateDeviceModal(patientId) {
+    $('#newDeviceId').val(''); 
+    $('#newDeviceId').data('patientId', patientId); 
+    $('#updateDeviceModal').modal('show');
+}
+
+    function updateDeviceId() {
+        const patientId = $('#newDeviceId').data('patientId');  
+        const newDeviceId = $('#newDeviceId').val().trim();     
+
+        if (!newDeviceId) {
+            alert('Device ID cannot be empty!');
+            return;
+        }
+
+        $.ajax({
+            url: '/api/updateDevice',       
+            method: 'POST',                  
+            contentType: 'application/json', 
+            data: JSON.stringify({          
+                patientId: patientId,
+                newDeviceId: newDeviceId
+            }),
+            success: function(response) {
+                if (response.status === 'SUCCESS') {
+                    alert('Device ID updated successfully!');
+
+                    
+                    $('#updateDeviceModal').modal('hide');
+                    window.location.reload(); 
+                } else {
+                    alert(response.msg || 'Failed to update Device ID');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('An error occurred while updating Device ID');
+            }
+        });
+    }
+
+
+    $(document).ready(function() {
+        loadPatients();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inflow Data and Results</title>
+    <!--
+    <link rel="shortcut icon" href="images/hetro_fav.png" type="image/png" />
+    -->
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/adminlte/css/adminlte.min.css">
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Add this line -->
+
+    <!-- Style overrides -->
+    <style>
+        table.dataTable tbody td {
+            word-break: break-word;
+            vertical-align: top;
+        }
+
+        .table.dataTable {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+
+
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+
+        <!-- Preloader 
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__wobble" src="images/hetro_square.png" alt="Logo" height="60" width="60">
+  </div>
+  -->
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-dark">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="../patients/" class="nav-link">Home</a>
+                </li>
+            </ul>
+
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="http://www.lifesigns.us" class="brand-link">
+                <img src="/images/logo2.png" alt="Logo" class="brand-image">
+                <span class="brand-text font-weight-light"></span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <!--
+          <img src="user-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+-->
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block"></a>
+                    </div>
+                </div>
+
+                <!-- SidebarSearch Form -->
+                <!--
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+	  -->
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+
+                        <li class="nav-header">Pleth BP Testing</li>
+
+                        <li class="nav-item">
+                            <a href="../pleth/" class="nav-link"><i class="nav-icon fas fa-th"></i>
+                                <p>Pleth Data Sets</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="../patients/" class="nav-link"><i class="nav-icon fas fa-user"></i>
+                                <p>Patients</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="../logs" class="nav-link"><i class="nav-icon fas fa-file"></i>
+                                <p>Logs</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="../uroflow" class="nav-link"><i class="nav-icon fas fa-table"></i>
+                                <p>Uroflow Meter</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="../inflow" class="nav-link"><i class="nav-icon fas fa-table"></i>
+                                <p>Inflow Meter</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+                </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Inflow Test Data</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Pleth Test Data</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table id="inflowList" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Timestamp</th>
+                                                <th>Device Id</th>
+                                                <th>Patient ID</th>
+                                                <th>Volume</th>
+                                                <th>Waveform/Dataset</th> 
+                                                <th>Waveform/Dataset</th> <!-- Table Icon -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>
+                                                    <i class="fas fa-chart-line" data-bs-toggle="modal" data-bs-target="#chartModal"></i>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-table" data-bs-toggle="modal" data-bs-target="#hourlyDataModal"></i>
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            
+                <!-- Hourly Data Modal -->
+                <div class="modal fade" id="hourlyDataModal" tabindex="-1" aria-labelledby="hourlyDataModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="hourlyDataModalLabel">Hourly Data</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container" id="hourlyDataContainer">
+                                    <p id="loadingMessage" style="display: none;">Loading data...</p>
+                                    <table id="hourlyDataTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Hour</th>
+                                                <th>Timestamp</th>
+                                                <th>Volume</th>
+                                                <th>Hourly Volume</th>
+                                                <th>Device ID</th>
+                                                <th>Patient ID</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="dailyDataModal" tabindex="-1" aria-labelledby="dailyDataModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dailyDataModalLabel">Current Data</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container" id="dailyDataContainer">
+                                    <p id="loadingMessageDaily" style="display: none;">Loading data...</p>
+                                    <table id="dailyDataTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Device ID</th>
+                                                <th>Patient ID</th>
+                                                <th>Timestamp</th>
+                                                <th>SSID</th>
+                                                <th>Volume</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Chart Modal -->
+                <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="chartModalLabel">Chart</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="chartContainer">
+                                    <canvas id="plethChartCanvas" style="width: 100%; height: 400px;"></canvas>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="chartModalLabel1">Chart</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="chartContainer">
+                                    <canvas id="plethChartCanvas" style="width: 100%; height: 400px;"></canvas>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div id="alert_status"></div>
+                <div id="info_msg" class="text-red" style="font-size:12px;display:none">
+                    NOTE: Before taking reading, ensure that measurement has been taken in last 15 mins. Older readings will not be used.
+                </div>
+            </section>
+            
+            <!-- /.content -->
+        </div>
+        <!-- /.container-fluid -->
+    </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <!---
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2023 <a href="http://www.hetrogenous.com">LEADMAX</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      Version 1.0.0
+    </div>
+  </footer>
+  -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/plugins/jszip/jszip.min.js"></script>
+    <!--
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+-->
+    <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/adminlte/js/adminlte.js"></script>
+
+    <!-- PAGE PLUGINS -->
+    <!-- jQuery Mapael -->
+    <!--
+<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script src="plugins/raphael/raphael.min.js"></script>
+<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
+<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+-->
+
+
+    <script>
+         $(document).ready(function () {
+        // Initialize DataTable
+        const inflowTable = $('#inflowList').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            language: {
+                paginate: {
+                    first: 'First',
+                    last: 'Last',
+                    next: 'Next',
+                    previous: 'Previous'
+                },
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "No entries available",
+                emptyTable: "No data available in table",
+            }
+        });
+
+            // Fetch data from API
+            $.ajax({
+                 type: 'GET',
+                 url: '/api/inflow',
+                 success: function (data) {
+                     console.log(data);
+                     inflowTable.clear();
+
+                     if (data.length > 0) {
+                         data.sort((a, b) => {
+                             if (a.f_patient_id < b.f_patient_id) return 1;
+                             if (a.f_patient_id > b.f_patient_id) return -1;
+                             if (a.f_device_id < b.f_device_id) return 1;
+                             if (a.f_device_id > b.f_device_id) return -1;
+                             return 0;
+                         });
+
+                         data.forEach(item => {
+                             inflowTable.row.add([
+                                 item.f_timestamp,
+                                 item.f_device_id,
+                                 item.f_patient_id,
+                                 item.f_volume,
+                                 // First column with both icons
+                                 `<button onclick="showHourlyChart('${item.f_device_id}')" title="Show Hourly Data">
+                        <i class="fas fa-chart-line"></i>
+                    </button>
+                    <button onclick="showHourlyData('${item.f_device_id}')" title="Show Cumulative Volume">
+                        <i class="fas fa-table"></i>
+                    </button>`,
+                                 // Second column with both icons (can be the same or different)
+                                 `<button onclick="showcumulativechart('${item.f_device_id}')" title="Show Hourly Data">
+                        <i class="fas fa-chart-line"></i>
+                    </button>
+                    <button onclick="showcumulativedata('${item.f_device_id}')" title="Show Cumulative Volume">
+                        <i class="fas fa-table"></i>
+                    </button>`
+                             ]).draw();
+                         });
+                     } else {
+                         inflowTable.row.add(["No data available", "", "", "", "", "", ""]).draw();
+                     }
+                 },
+                 error: function (xhr, status, error) {
+                     console.error('Error retrieving data:', error);
+                     inflowTable.row.add(["Error retrieving data", "", "", "", "", "", ""]).draw();
+                 }
+             });
+
+        });
+
+        function showHourlyChart(deviceId) {
+    $('#chartModal').modal('show');
+
+    $('#chartModal').on('shown.bs.modal', function () {
+        renderChart(deviceId);
+    });
+}
+
+function renderChart(deviceId) {
+    const ctx = document.getElementById('plethChartCanvas').getContext('2d');
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/hourly-data/${deviceId}`, 
+        success: function (response) {
+            const labels = [];
+            const hourlyDeltas = [];
+
+            response.forEach(hourData => {
+                labels.push(hourData.hour);
+                hourlyDeltas.push(hourData.hourlyDeltaSum);
+            });
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Device ' + deviceId + ' Hourly Delta Sum',
+                    data: hourlyDeltas,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hourly Delta Sum (ml)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Hour'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Show the modal after rendering the chart
+            $('#chartModal').modal('show');
+
+            // Add a click event listener to reload the page
+            document.addEventListener('click', reloadPage);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving chart data:', error);
+        }
+    });
+}
+
+// Reload the page and remove the event listener
+function reloadPage() {
+    document.removeEventListener('click', reloadPage);
+    location.reload();
+}
+
+
+
+function showHourlyData(deviceId) {
+    $('#hourlyDataModal').modal('show');
+
+    const hourlyDataTable = $('#hourlyDataTable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        pageLength: 10,
+        destroy: true
+    });
+
+    $('#loadingMessage').show(); 
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/hourly-data/${deviceId}`,
+        success: function (data) {
+            console.log('Fetched hourly data:', data);
+            hourlyDataTable.clear();
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(hourData => {
+                    hourData.data.forEach(entry => {
+                        hourlyDataTable.row.add([
+                            hourData.hour || '-',
+                            entry.timestamp || '-',
+                            entry.volume || '-',
+                            hourData.hourlyDeltaSum || '-', 
+                            entry.device_id || '-',
+                            entry.patient_id || '-',
+                            entry.cumulative_Volume || '-'
+                        ]).draw();
+                    });
+                });
+            } else {
+                hourlyDataTable.row.add(["No data available", "", "", "", "", ""]).draw();
+            }
+
+            $('#loadingMessage').hide(); 
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving data:', error);
+            hourlyDataTable.row.add(["Error retrieving data", "", "", "", "", ""]).draw();
+            $('#loadingMessage').hide(); 
+        }
+    });
+}
+
+
+function showcumulativedata(deviceId) {
+    // Show modal
+    $('#dailyDataModal').modal('show');
+
+    // Initialize DataTable for #dailyDataTable only once
+    let dailyDataTable;
+    if ($.fn.DataTable.isDataTable('#dailyDataTable')) {
+        dailyDataTable = $('#dailyDataTable').DataTable();
+        dailyDataTable.clear(); // Clear existing data if DataTable is already initialized
+    } else {
+        dailyDataTable = $('#dailyDataTable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            pageLength: 10,
+            destroy: true  
+        });
+    }
+
+    // Show loading message
+    $('#loadingMessageDaily').show();
+
+    // Fetch data via AJAX
+    $.ajax({
+        type: 'GET',
+        url: `/api/device-data`,  
+        success: function (data) {
+            console.log('Fetched device data:', data);
+
+            // Check if data array is not empty
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(entry => {
+                    dailyDataTable.row.add([
+                        entry.f_device_id || '-',
+                        entry.f_patient_id || '-',
+                        entry.f_timestamp ? new Date(entry.f_timestamp * 1000).toLocaleString() : '-',
+                        entry.f_ssid || '-',  // Ensure field name matches your data structure
+                        entry.f_volume || '-',
+                        entry.f_status || '-' // Adjusted to f_status to match the field name in your data
+                    ]);
+                });
+
+                // Draw table with new data
+                dailyDataTable.draw();
+            } else {
+                dailyDataTable.row.add(["No data available", "", "", "", "", ""]).draw();
+            }
+
+            // Hide loading message
+            $('#loadingMessageDaily').hide();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving data:', error);
+            dailyDataTable.row.add(["Error retrieving data", "", "", "", "", ""]).draw();
+            $('#loadingMessageDaily').hide();
+        }
+    });
+}
+
+
+
+function showcumulativechart() {
+    // Open chart modal
+    $('#chartModal').modal('show');
+
+    // Use Bootstrap's shown.bs.modal event to ensure the modal is displayed before rendering the chart
+    $('#chartModal').on('shown.bs.modal', function () {
+        renderDeviceDataChart();
+    });
+}
+
+function renderDeviceDataChart() {
+    const ctx = document.getElementById('plethChartCanvas').getContext('2d');
+
+    // Clear the previous chart
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    // Fetch chart data from the API
+    $.ajax({
+        type: 'GET',
+        url: `/api/device-data`,
+        success: function (response) {
+            const labels = [];
+            const volumes = []; 
+
+            response.forEach(entry => {
+                const timestamp = new Date(entry.f_timestamp * 1000); 
+                labels.push(timestamp.toLocaleString());
+                volumes.push(entry.f_volume);
+            });
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Device Volume Data',
+                    data: volumes,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            // Create the new chart
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (ml)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Timestamp' 
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Show the modal after rendering the chart
+            $('#chartModal').modal('show');
+
+            // Add a click event listener to reload the page
+            document.addEventListener('click', reloadPage);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error retrieving chart data:', error);
+        }
+    });
+}
+
+// Function to reload the page and remove the event listener
+function reloadPage() {
+    document.removeEventListener('click', reloadPage);
+    location.reload();
+}
+
+
+
+
+        // $('#plethChartModal').on('show.bs.modal', function (event) {
+
+        //     if (selectedValue == 'chart') {
+        //         document.getElementById("pleth-chart-data").style.display = "none";
+        //         PlethLineChart.showChart(selectedDataId);
+        //     } else {
+        //         document.getElementById("pleth-chart-div").style.display = "none";
+        //         document.getElementById("pleth-chart-data").style.display = "block";
+        //         getPlethData(selectedDataId);
+        //     }
+
+        // });
+
+        // $('#plethChartModal').on('hidden.bs.modal', function (event) {
+
+        //     PlethLineChart.clearChart();
+        // });
+
+        // function getPlethData(dataId) {
+
+        //     console.log('Getting data for ' + dataId);
+
+        //     $.ajax({
+        //         type: "GET",
+        //         url: '../bpDataService/plethChartData/',
+        //         dataType: "json",
+        //         data: { action: "plethChartData", dataId: dataId },
+
+        //         success: function (list) {
+
+        //             val = JSON.stringify(list);
+        //             val2 = val.replace(/,/g, ', ');
+        //             console.log(val2);
+        //             $('#pleth-chart-text').html(val2);
+        //         },
+        //         error: function (xhr, status, error) { }
+        //     });
+        // }
+
+
+        // function exportCSV() {
+
+        //     PlethLineChart.theChart.downloadCSV();
+        // }
+
+
+    </script>
+
+    <!-- <script>
+
+        $(document).ready(function () {
+
+            PlethList.show();
+            setInterval(function () { $('#info_msg').show(); }, 3000);
+        });
+
+    </script> -->
+
+    <!-- Internal -->
+    <script src="/plugins/moment/moment.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+
+    <script src="/js/utils.js"></script>
+    <script src="/js/ajaxutils.js"></script>
+    <script src="/js/plethList.js"></script>
+    <script src="/js/plethLineChart.js"></script>
+
+</body>
+
+</html>
